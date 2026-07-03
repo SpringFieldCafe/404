@@ -24,17 +24,18 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		<div id="bg-player">
 			<div
 				id="bg-player-overlay"
-				class="absolute inset-0 z-15 overflow-hidden pointer-events-none transition-opacity duration-500 ease-in-out opacity-0"
+				class="absolute inset-0 z-5 overflow-hidden pointer-events-none transition-opacity duration-500 ease-in-out opacity-0" 
 			>
 				<video
-  					id="bg-player-video"
-  					src={urls[0]}
-  					preload="auto"
-  					autoplay
-  					muted
-  					loop
-  					playsinline
-  					class="hidden md:block size-full object-cover"
+  				id="bg-player-video"
+  				src={urls[0]}
+  				preload="auto"
+  				autoplay
+  				muted
+  				loop
+				playsinline
+				class="hidden md:block size-full object-cover"
+				style="object-position: center 29%;"
 				></video>
 			</div>
 
@@ -90,6 +91,7 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		if (video.getAttribute("data-player-init")) return;
 		video.setAttribute("data-player-init", "true");
 
+		var isDesktop = window.matchMedia("(min-width: 768px)").matches;
 		var isPlaying = false;
 		var currentIndex = 0;
 		var errorCount = 0;
@@ -129,12 +131,19 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		}
 
 		function doPlay() {
-			video.src = urlList[currentIndex];
-			video.muted = true;
-			video.play()
-				.then(function () { setTimeout(function () { if (video) video.muted = false; }, 100); })
-				.catch(function () { isPlaying = false; syncAttr(); });
-		}
+		video.src = urlList[currentIndex];
+		video.muted = true;
+		video.loop = !isMultiple;
+		video.play()
+		.catch(function () {
+			isPlaying = false;
+			if (overlay) {
+				overlay.classList.remove("opacity-100");
+				overlay.classList.add("opacity-0");
+			}
+			syncAttr();
+		});
+}
 
 		function switchTrack(index) {
 			if (index < 0 || index >= urlList.length) return;
@@ -192,6 +201,15 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		window.addEventListener("bg-player-toggle", toggle);
 		video.addEventListener("ended", onEnded);
 		video.addEventListener("error", onError);
+		if (isDesktop) {
+	isPlaying = true;
+	if (overlay) {
+		overlay.classList.remove("opacity-0");
+		overlay.classList.add("opacity-100");
+	}
+	syncAttr();
+	requestAnimationFrame(function () { doPlay(); });
+}
 		// 播放成功时重置错误计数
 		video.addEventListener("playing", function () { errorCount = 0; });
 		if (prevBtn) prevBtn.addEventListener("click", function () { switchTrack(prevIndex()); });
@@ -225,11 +243,7 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 </script>
 
 <style>
-	:global([data-bg-video-playing] #banner-images-container),
-	:global([data-bg-video-playing] #banner-dim-container),
-	:global([data-bg-video-playing] #banner-overlay-container),
-	:global([data-bg-video-playing] #header-waves),
-	:global([data-bg-video-playing] #wallpaper-gradient) {
+	:global([data-bg-video-playing] #banner-images-container) {
 		opacity: 0 !important;
 		transition: opacity 0.5s ease;
 	}
