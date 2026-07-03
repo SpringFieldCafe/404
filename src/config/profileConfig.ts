@@ -40,6 +40,12 @@ export const profileConfig: ProfileConfig = {
       showName: false,
     },
     {
+      name: "Gitee",
+      icon: "fa7-brands:gitee",
+      url: "https://gitee.com/h-keduoli-q",
+      showName: false,
+    },
+    {
       name: "Email",
       icon: "fa7-solid:envelope",
       url: "mailto:2574703489@qq.com",
