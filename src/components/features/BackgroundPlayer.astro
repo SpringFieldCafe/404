@@ -24,7 +24,7 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		<div id="bg-player">
 			<div
 				id="bg-player-overlay"
-				class="absolute inset-0 z-0 overflow-hidden pointer-events-none transition-opacity duration-500 ease-in-out opacity-0" 
+				class="fixed inset-0 z-0 overflow-hidden pointer-events-none transition-opacity duration-500 ease-in-out opacity-0"
 			>
 				<video
   				id="bg-player-video"
@@ -201,27 +201,68 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 		window.addEventListener("bg-player-toggle", toggle);
 		video.addEventListener("ended", onEnded);
 		video.addEventListener("error", onError);
-		if (isDesktop) {
-	isPlaying = true;
-	if (overlay) {
-		overlay.classList.remove("opacity-0");
-		overlay.classList.add("opacity-100");
-	}
-	syncAttr();
-	requestAnimationFrame(function () { doPlay(); });
-}
-		// 播放成功时重置错误计数
-		video.addEventListener("playing", function () { errorCount = 0; });
+
+		// 播放成功时重置错误计数，并同步导航栏按钮状态
+		video.addEventListener("playing", function () {
+			errorCount = 0;
+			isPlaying = true;
+			syncAttr();
+		});
+
 		if (prevBtn) prevBtn.addEventListener("click", function () { switchTrack(prevIndex()); });
 		if (nextBtn) nextBtn.addEventListener("click", function () { switchTrack(pickIndex(currentIndex)); });
 
-		// 切换壁纸模式时停止播放
+		// 桌面端默认自动播放
+		if (isDesktop) {
+			isPlaying = true;
+			if (overlay) {
+				overlay.classList.remove("opacity-0");
+				overlay.classList.add("opacity-100");
+			}
+
+			syncAttr();
+			requestAnimationFrame(function () { doPlay(); });
+
+			// 延迟再同步一次，防止 Navbar 初始化较晚导致图标状态没更新
+			setTimeout(function () { syncAttr(); }, 300);
+			setTimeout(function () { syncAttr(); }, 1000);
+		}
+
+		// 切换壁纸模式时控制视频播放
 		window.addEventListener("wallpaperModeChange", function (e) {
-			if (e.detail && e.detail.mode === "none" && isPlaying) {
+			var mode = e.detail && e.detail.mode;
+
+			// 纯色背景：暂停并隐藏视频
+			if (mode === "none") {
 				isPlaying = false;
 				video.pause();
-				if (overlay) { overlay.classList.remove("opacity-100"); overlay.classList.add("opacity-0"); }
+
+				if (overlay) {
+					overlay.classList.remove("opacity-100");
+					overlay.classList.add("opacity-0");
+				}
+
 				syncAttr();
+				return;
+			}
+
+			// 从纯色背景切回其他壁纸模式：桌面端自动恢复视频
+			if (isDesktop) {
+				isPlaying = true;
+
+				if (overlay) {
+					overlay.classList.remove("opacity-0");
+					overlay.classList.add("opacity-100");
+				}
+
+				syncAttr();
+
+				requestAnimationFrame(function () {
+					doPlay();
+				});
+
+				// 防止 Navbar 按钮状态晚一步
+				setTimeout(function () { syncAttr(); }, 300);
 			}
 		});
 
@@ -243,7 +284,27 @@ const tLoadError = i18n(I18nKey.videoLoadError);
 </script>
 
 <style>
-	:global([data-bg-video-playing] #banner-images-container) {
+	/* 视频播放时，隐藏横幅静态壁纸 */
+	:global(html[data-bg-video-playing] #banner-images-container),
+	:global(body[data-bg-video-playing] #banner-images-container) {
+		opacity: 0 !important;
+		transition: opacity 0.5s ease;
+	}
+
+	/* 视频播放时，隐藏全屏静态壁纸 */
+	:global(html[data-bg-video-playing] #fullscreen-wallpaper),
+	:global(body[data-bg-video-playing] #fullscreen-wallpaper),
+	:global(html[data-bg-video-playing] #fullscreen-wallpaper-container),
+	:global(body[data-bg-video-playing] #fullscreen-wallpaper-container) {
+		opacity: 0 !important;
+		transition: opacity 0.5s ease;
+	}
+
+	/* 视频播放时，隐藏通用 wallpaper 静态图片层 */
+	:global(html[data-bg-video-playing] .wallpaper-image),
+	:global(body[data-bg-video-playing] .wallpaper-image),
+	:global(html[data-bg-video-playing] .background-wallpaper),
+	:global(body[data-bg-video-playing] .background-wallpaper) {
 		opacity: 0 !important;
 		transition: opacity 0.5s ease;
 	}
