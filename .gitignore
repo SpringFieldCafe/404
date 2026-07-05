@@ -37,3 +37,18 @@ Firefly-docs/
 cache/
 package/
 .obsidian/
+
+# Codex / local agent files
+AGENTS.md
+.codex-*.log
+
+# pnpm local cache / approve-builds state
+.pnpm-store/
+pnpm-workspace.yaml
+
+
+.env.local
+.env.*.local
+.dev.vars
+.wrangler/
+

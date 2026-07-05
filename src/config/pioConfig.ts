@@ -130,9 +130,9 @@ export const live2dWidgetConfig: Live2DWidgetConfig = {
     // },
   ],
   // 显示位置：bottom-left 或 bottom-right
-  position: "bottom-right" as const,
+  position: "bottom-left" as const,
   // 画布尺寸（px）
-  size: { width: 450, height: 450 },
+  size: { width: 350, height: 370 },
   // 主题色，用于菜单、状态条等 UI 元素的背景色，默认 'rgba(96,165,250,0.9)'
   primaryColor: "var(--l2d-msg-bg)",
   // 入场/退场动画时长（ms）
