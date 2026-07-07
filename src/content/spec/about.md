@@ -8,19 +8,25 @@ QQ好友密码：恨之入骨    **(请在备注中说明来意)**
 
 微信： Ta_chi_ba_na                **(请在备注中说明来意)**
 
+其他社交媒体包括GitHub网址已在我的足迹和左边个人信息下面给出
 
 ---
 
-## 🛠️ 关于本站
+## 🛠️ 本站技术信息
 
-这个网站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly) 模板，Firefly 是基于 [Fuwari](https://github.com/saicaca/fuwari) 的二次开发，在firefly基础上进行更改的
+本站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly) 模板，
+
+Firefly 是基于 [Fuwari](https://github.com/saicaca/fuwari) 进行二次开发的博客主题，本博客在 Firefly 基础上进行了进一步定制。
 
 
 
 ---
 
-## 📚 关于本站原模板Firefly介绍
-**Firefly** 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
+## 📚 本站所使用的 Firefly 模板介绍
+**Firefly** 是一款基于 Astro 框架和 Fuwari 模板开发的现代化个人博客主题，
+面向技术爱好者和内容创作者设计。
+
+该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，帮助其他人能够轻松打造出专业且美观的个人博客网站。
 
 下面这些是firefly相关信息
 
