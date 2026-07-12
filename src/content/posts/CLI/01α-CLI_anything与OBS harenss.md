@@ -1,6 +1,6 @@
 ---
-title: 01-CLI_anything与OBS
-publish: 2026-07-08
+title: 01-CLI_anything与OBS hareness
+published: 2026-07-08
 pinned: false
 draft: false
 description: 使用CLI_anything操控OBS
