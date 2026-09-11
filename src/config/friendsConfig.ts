@@ -59,6 +59,15 @@ export const friendsConfig: FriendLink[] = [
 		weight: 8,
 		enabled: true,
 	},
+	{
+		title: "Astro",
+		imgurl: "https://m2niwa.github.io/assets/wines/tiaodonghu-ipa.jpg",
+		desc: "霍凌志 · AI 开发 & 游戏策划",
+		siteurl: "https://m2niwa.github.io/",
+		tags: ["Framework"],
+		weight: 8,
+		enabled: true,
+	},
 ];
 
 // 获取启用的友链并进行排序
